@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,28 +21,31 @@ public class LeituraArquivo {
             try {
                 String line;
                 String[] str;
-                List<Coordenadas> listaCoordenadases = new ArrayList<>();
+                List<Coordenadas> listaCoordenadases;
                 int cont = 0;
                 // Le as informacoes do arquivo (apenas uma linha por vez)
                 while ((line = buf.readLine()) != null) {
+                    cont++;
                     Pessoa pessoa = new Pessoa();
+                    listaCoordenadases = new ArrayList<>();
+
+                    System.out.println(cont + ">>>"+line);
 
                     // Pula a linha que informa o número de pixels equivalente na conversão de dados
                     if(line.contains("["))
                         continue;
 
-                    // Pega o número que indica que é uma nova pessoa
-                    if(line.contains("\t")){
-                        // TODO: Corrigir este erro, que acaba pegando a tabulação
-                        String[] indiceTab = line.split("\\t");
-                        int qtdeMovimentosPessoa = Integer.parseInt(line.substring(0, indiceTab));
-                        pessoa.setQtdeMovimentos(qtdeMovimentosPessoa);
-                    }
-
                     str = line.split("[\\(\\)]");
                     for (String s : str) {
+                        // Pega o número que indica que é uma nova pessoa, com a quantidade de movimentos
+                        if(s.contains("\t")) {
+                            int indiceTab = line.lastIndexOf("\t");
+                            int qtdeMovimentosPessoa = Integer.parseInt(line.substring(0, indiceTab));
+                            pessoa.setQtdeMovimentos(qtdeMovimentosPessoa);
+                        }
                         // Caso a linha esteja vazia, não a adiciona ao array
-                        if(!"".equals(s)) {
+                        else if(!"".equals(s)) {
+//                            System.out.println("Conteudo de 's':" + s);
                             String[] pos = s.split(",");
                             Coordenadas coordenadas = new Coordenadas(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]), Integer.parseInt(pos[2]));
                             listaCoordenadases.add(coordenadas);

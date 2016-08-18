@@ -28,9 +28,9 @@ public class Pessoa {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getQtdeMovimentos() + ":");
+        sb.append("\nQtde movimentos: ").append(getQtdeMovimentos()).append("\n");
         for (Coordenadas c : listaCoordenadas) {
-            sb.append(c.toString()+"\n");
+            sb.append(c.toString()).append("\n");
         }
         return sb.toString();
     }
