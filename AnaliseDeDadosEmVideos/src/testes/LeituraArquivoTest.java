@@ -3,6 +3,7 @@ package testes;
 import codigo.LeituraArquivo;
 import modelos.Pessoa;
 
+import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -22,7 +23,7 @@ public class LeituraArquivoTest {
 
     @org.junit.Test
     public void testLer() throws Exception {
-        List<Pessoa> listaPessoas = leituraArquivo.ler(caminhoArquivo);
+        List<Pessoa> listaPessoas = leituraArquivo.ler(new File(caminhoArquivo));
 
         for (Pessoa p : listaPessoas) {
             System.out.println(p.toString());

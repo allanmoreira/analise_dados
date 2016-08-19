@@ -4,6 +4,7 @@ import modelos.Coordenadas;
 import modelos.Pessoa;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by Allan Moreira on 8/17/16.
  */
 public class LeituraArquivo {
-    public List<Pessoa> ler(String nomeArq) {
+    public List<Pessoa> ler(File nomeArq) {
         List<Pessoa> listaPessoas = new ArrayList<>();
 
         try {
