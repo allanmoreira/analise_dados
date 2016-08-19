@@ -1,6 +1,9 @@
 package testes;
 
 import codigo.LeituraArquivo;
+import modelos.Pessoa;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -10,6 +13,7 @@ import static org.junit.Assert.*;
 public class LeituraArquivoTest {
 
     private LeituraArquivo leituraArquivo;
+    private String caminhoArquivo = System.getProperty("user.dir") + "/src/arquivos/Paths_D - Spain_ES-01.txt";
 
     @org.junit.Before
     public void setUp() throws Exception {
@@ -18,6 +22,11 @@ public class LeituraArquivoTest {
 
     @org.junit.Test
     public void testLer() throws Exception {
-        leituraArquivo.ler("/home/PORTOALEGRE/12111151/DriveH/computacao_grafica_I/AnaliseDeDadosEmVideos/src/arquivos/Paths_D - Spain_ES-01.txt");
+        List<Pessoa> listaPessoas = leituraArquivo.ler(caminhoArquivo);
+
+        for (Pessoa p : listaPessoas) {
+            System.out.println(p.toString());
+            System.out.println("----------------------------------------");
+        }
     }
 }

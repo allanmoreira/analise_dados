@@ -1,4 +1,4 @@
-package codigo;
+package modelos;
 
 import java.util.List;
 
@@ -28,9 +28,9 @@ public class Pessoa {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\nQtde movimentos: ").append(getQtdeMovimentos()).append("\n");
+        sb.append(getQtdeMovimentos()).append("\t");
         for (Coordenadas c : listaCoordenadas) {
-            sb.append(c.toString()).append("\n");
+            sb.append(c.toString());
         }
         return sb.toString();
     }
