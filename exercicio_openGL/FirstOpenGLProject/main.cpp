@@ -5,11 +5,15 @@
 void Desenha(void)
 {
 	// Limpa a janela de visualização com a cor branca
-	glClearColor(1,1,1,0);
+	//glClearColor(1,1,1,0);
+	// Limpa a janela de visualização, dexando o fundo preto
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Define a cor de desenho: azul
-	glColor3f(0,0,1);
+	//glColor3f(0,0,1);
+	// Define a cor de desenho: vermelho
+	glColor3f(1.0f, 0.0f, 0.0f);
 
 	// Desenha um triângulo no centro da janela
 	glBegin(GL_TRIANGLES);
