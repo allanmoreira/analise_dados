@@ -1,4 +1,4 @@
-package codigo;
+package modelos;
 
 /**
  * Created by 12111151 on 8/17/16.
@@ -38,7 +38,6 @@ public class Coordenadas {
 
     @Override
     public String toString() {
-
-        return "x="+x+" y="+y+" t="+tempo;
+        return "("+x+","+y+","+tempo+")";
     }
 }
