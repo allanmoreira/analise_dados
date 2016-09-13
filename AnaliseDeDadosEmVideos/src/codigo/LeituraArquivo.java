@@ -1,21 +1,19 @@
 package codigo;
 
-import modelos.Coordenadas;
-import modelos.Pessoa;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Allan Moreira on 8/17/16.
  */
 public class LeituraArquivo {
-    public List<Pessoa> ler(File nomeArq) {
-        List<Pessoa> listaPessoas = new ArrayList<>();
+
+    public ArrayList<Bolinha> ler(File nomeArq) {
+
+        ArrayList<Bolinha> listaPessoas = new ArrayList<>();
 
         try {
             // Abre o arquivo
@@ -24,11 +22,11 @@ public class LeituraArquivo {
             try {
                 String line;
                 String[] str;
-                List<Coordenadas> listaCoordenadases;
+                Queue<Coordenada> filaCoordenadas;
                 // Le as informacoes do arquivo (uma linha por vez)
                 while ((line = buf.readLine()) != null) {
-                    Pessoa pessoa = new Pessoa();
-                    listaCoordenadases = new ArrayList<>();
+                    Bolinha pessoa = new Bolinha();
+                    filaCoordenadas = new Queue<>();
 
                     // Pula a linha que informa o número de pixels equivalente na conversão de dados
                     if(line.contains("["))
@@ -46,12 +44,12 @@ public class LeituraArquivo {
                         // Caso a linha esteja vazia, não a adiciona ao array
                         if(!"".equals(s)) {
                             String[] pos = s.split(",");
-                            Coordenadas coordenadas = new Coordenadas(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]), Integer.parseInt(pos[2]));
-                            listaCoordenadases.add(coordenadas);
+                            Coordenada coordenada = new Coordenada(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]), Integer.parseInt(pos[2]));
+                            filaCoordenadas.enqueue(coordenada);
                         }
                     }
                     // Adiciona a lista de coordenadas referente à pessoa
-                    pessoa.setListaCoordenadas(listaCoordenadases);
+                    pessoa.setFilaCoordenadas(filaCoordenadas);
                     listaPessoas.add(pessoa);
                 }
             } finally {
@@ -61,7 +59,6 @@ public class LeituraArquivo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return listaPessoas;
     }
 }

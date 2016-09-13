@@ -1,12 +1,12 @@
-package modelos;
+package codigo;
 
 /**
  * Created by 12111151 on 8/17/16.
  */
-public class Coordenadas {
+public class Coordenada {
     private int x, y, tempo;
 
-    public Coordenadas(int x, int y, int tempo) {
+    public Coordenada(int x, int y, int tempo) {
         this.x = x;
         this.y = y;
         this.tempo = tempo;

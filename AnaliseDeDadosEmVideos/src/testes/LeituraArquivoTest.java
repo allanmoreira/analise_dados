@@ -1,12 +1,11 @@
 package testes;
 
+import codigo.Bolinha;
+import codigo.Coordenada;
 import codigo.LeituraArquivo;
-import modelos.Pessoa;
 
 import java.io.File;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by 12111151 on 8/17/16.
@@ -23,11 +22,15 @@ public class LeituraArquivoTest {
 
     @org.junit.Test
     public void testLer() throws Exception {
-        List<Pessoa> listaPessoas = leituraArquivo.ler(new File(caminhoArquivo));
+        List<Bolinha> listaPessoas = leituraArquivo.ler(new File(caminhoArquivo));
 
-        for (Pessoa p : listaPessoas) {
-            System.out.println(p.toString());
-            System.out.println("----------------------------------------");
+        for (Bolinha p : listaPessoas) {
+            while(p.getFilaCoordenadas().isEmpty() == false){
+                Coordenada c = p.getFilaCoordenadas().dequeue();
+                System.out.println(c.toString());
+            }
+            System.out.println("-----------------------------------------------");
         }
     }
+
 }
