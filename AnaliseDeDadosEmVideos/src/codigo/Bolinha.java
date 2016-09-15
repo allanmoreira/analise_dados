@@ -12,9 +12,19 @@ public class Bolinha {
     private Queue<Coordenada> filaCoordenadas;
     private boolean estaNoTempo;
     private Color cor;
+    private int menorDistancia = 3000;
+    private String esp = "";
 
     public Bolinha (){
         this.cor = Color.WHITE;
+    }
+
+    public int getMenorDistancia() {
+        return menorDistancia;
+    }
+
+    public void setMenorDistancia(int menorDistancia) {
+        this.menorDistancia = menorDistancia;
     }
 
     public int getX() {
@@ -25,8 +35,9 @@ public class Bolinha {
         return y;
     }
 
-    public void setCor(Color cor){
+    public void setCor(Color cor, String esp){
         this.cor = cor;
+        this.esp = esp;
     }
 
     public boolean isEstaNoTempo(){
@@ -63,6 +74,7 @@ public class Bolinha {
     public void desenha(Graphics g) {
         if (isEstaNoTempo()){
             g.setColor(cor);
+            g.drawString(esp, x-10, y);
             g.fillOval(x, y, TAMANHO, TAMANHO);
         }
     }

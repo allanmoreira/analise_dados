@@ -19,8 +19,12 @@ public class JanelaPrincipal extends JFrame {
     private BufferedImage backBuffer;
     private static final int FPS = 30;
     private int janelaW = 1366;
-    private int janelaH = 768;
+    private int janelaH = 800;
+    private int painelBolW = 800;
+    private int painelBolH = 800;
     private int pixelsPorMetro;
+
+    private JPanel painelBolinhas;
 
     // ====================================================
     private int contadorTempo = 1;
@@ -37,6 +41,7 @@ public class JanelaPrincipal extends JFrame {
         mapaCores.put("intimo", new Color(255, 3,0));
         mapaCores.put("pessoal", new Color(255, 250, 0));
         mapaCores.put("social", new Color(15, 16, 255));
+        mapaCores.put("publico", new Color(2, 255, 0));
     }
 
     private void setup(){
@@ -47,7 +52,6 @@ public class JanelaPrincipal extends JFrame {
     }
 
     private void movimentarBolinhas() {
-        // Para cada pessoa na lista, realiza o movimento
         for (Bolinha bolinha: listaBolinhas) {
             bolinha.movimenta(contadorTempo);
         }
@@ -67,19 +71,23 @@ public class JanelaPrincipal extends JFrame {
 
     private void calculaEspacoPessoal(Bolinha b1, Bolinha b2){
         int distancia = (int) distanciaEntreDoisPontos(b1, b2);
-        if (distancia <= pixelsPorMetro/2){
-            b1.setCor(mapaCores.get("intimo"));
-            b2.setCor(mapaCores.get("intimo"));
-        }
-        else if(distancia > pixelsPorMetro/2 && distancia <= (pixelsPorMetro + pixelsPorMetro/2)){
-            b1.setCor(mapaCores.get("pessoal"));
-            b2.setCor(mapaCores.get("pessoal"));
-        }
-        else if(distancia > (pixelsPorMetro + pixelsPorMetro/2) && distancia < pixelsPorMetro*2){
-            b1.setCor(mapaCores.get("social"));
-            b2.setCor(mapaCores.get("social"));
-        }
 
+        int cinqCentim = pixelsPorMetro/2;
+        int umMetroEmeio = pixelsPorMetro + pixelsPorMetro/2;
+        int doisMetros = pixelsPorMetro*2;
+
+        if (distancia <= cinqCentim){
+            b1.setCor(mapaCores.get("intimo"), "intimo");
+            b1.setMenorDistancia(distancia);
+        }
+        else if(distancia > cinqCentim && distancia <= umMetroEmeio){
+            b1.setCor(mapaCores.get("pessoal"), "pessoal");
+            b1.setMenorDistancia(distancia);
+        }
+        else if(distancia > umMetroEmeio && distancia <= doisMetros){
+            b1.setCor(mapaCores.get("social"), "social");
+            b1.setMenorDistancia(distancia);
+        }
     }
 
     private void desenharGraficos() {
@@ -91,7 +99,7 @@ public class JanelaPrincipal extends JFrame {
 
         for (Bolinha bolinha: listaBolinhas) {
             bolinha.desenha(bbg);
-            bolinha.setCor(Color.WHITE);
+            bolinha.setCor(mapaCores.get("publico"), "publico");
         }
 
         g.drawImage(backBuffer, 0, 0, this);
@@ -111,8 +119,76 @@ public class JanelaPrincipal extends JFrame {
         setLayout(null);
         setVisible(true);
         backBuffer = new BufferedImage(janelaW, janelaH, BufferedImage.TYPE_INT_RGB);
+//        montaTela();
     }
 
+    /*
+    private void montaTela(){
+        JTextField jTextFieldCampoTexto;
+        JLabel labelTitulo;
+        JPanel painelDados;
+
+        painelBolinhas = new javax.swing.JPanel();
+//        painelBolinhas.setSize(painelBolW, painelBolH);
+        painelDados = new javax.swing.JPanel();
+        labelTitulo = new javax.swing.JLabel();
+        jTextFieldCampoTexto = new javax.swing.JTextField();
+
+        GroupLayout painelBolinhasLayout = new GroupLayout(painelBolinhas);
+        painelBolinhas.setLayout(painelBolinhasLayout);
+        painelBolinhasLayout.setHorizontalGroup(painelBolinhasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 193, Short.MAX_VALUE));
+        painelBolinhasLayout.setVerticalGroup(painelBolinhasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+
+        painelDados.setBackground(new java.awt.Color(169, 169, 169));
+
+        labelTitulo.setText("Título");
+
+        jTextFieldCampoTexto.setEditable(false);
+        jTextFieldCampoTexto.setText("jTextField1");
+
+        GroupLayout painelDadosLayout = new GroupLayout(painelDados);
+        painelDados.setLayout(painelDadosLayout);
+        painelDadosLayout.setHorizontalGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(painelDadosLayout.createSequentialGroup()
+                                .addGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(painelDadosLayout.createSequentialGroup()
+                                                .addGap(21, 21, 21)
+                                                .addComponent(labelTitulo))
+                                        .addGroup(painelDadosLayout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(jTextFieldCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(119, Short.MAX_VALUE))
+        );
+        painelDadosLayout.setVerticalGroup(
+                painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(painelDadosLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(labelTitulo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(115, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(painelBolinhas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(painelDados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(painelBolinhas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(painelDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 123, Short.MAX_VALUE))
+        );
+
+        pack();
+    }
+    */
     private void run() {
         int cont = 0;
         setup();
