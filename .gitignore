@@ -15,5 +15,12 @@ hs_err_pid*
 AnaliseDeDadosEmVideos/.idea/
 AnaliseDeDadosEmVideos/AnaliseDeDadosEmVideos.iml
 AnaliseDeDadosEmVideos/out/
-/AnaliseDeDadosEmVideos/AnaliseDeDadosEmVideos/nbproject/private/
-/AnaliseDeDadosEmVideos/nbproject/private/
+AnaliseDeDadosEmVideos/AnaliseDeDadosEmVideos/nbproject/private/
+AnaliseDeDadosEmVideos/nbproject/private/
+AnaliseDeDadosEmVideos/build/
+AnaliseDeDadosEmVideos/src/outros/
+AnaliseDeDadosEmVideos/build.xml
+AnaliseDeDadosEmVideos/lib/
+AnaliseDeDadosEmVideos/manifest.mf
+AnaliseDeDadosEmVideos/nbproject/
+

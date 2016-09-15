@@ -11,6 +11,12 @@ import java.util.ArrayList;
  */
 public class LeituraArquivo {
 
+    private int pixelsPorMetro;
+
+    public int getPixelsPorMetro() {
+        return pixelsPorMetro;
+    }
+
     public ArrayList<Bolinha> ler(File nomeArq) {
 
         ArrayList<Bolinha> listaPessoas = new ArrayList<>();
@@ -29,8 +35,10 @@ public class LeituraArquivo {
                     filaCoordenadas = new Queue<>();
 
                     // Pula a linha que informa o número de pixels equivalente na conversão de dados
-                    if(line.contains("["))
+                    if(line.contains("[")) {
+                        pixelsPorMetro = Integer.parseInt(line.substring(line.indexOf("[")+1, line.indexOf("]")));
                         continue;
+                    }
 
                     // Pega o número que indica que é uma nova pessoa, com a quantidade de movimentos da mesma
                     int indiceTab = line.lastIndexOf("\t");

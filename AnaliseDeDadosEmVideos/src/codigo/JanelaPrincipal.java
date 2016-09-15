@@ -1,5 +1,9 @@
 package codigo;
 
+/**
+ * Created by allanmoreira on 14/09/16.
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,21 +16,18 @@ import java.util.HashMap;
  */
 public class JanelaPrincipal extends JFrame {
 
-    BufferedImage backBuffer;
-    int FPS = 30;
-    int janelaW = 1366;
-    int janelaH = 768;
-
-    boolean colidiuEsquerda = false;
-    boolean colidiuDireita = false;
-    boolean colidiuCima = false;
-    boolean colidiuBaixo = false;
+    private BufferedImage backBuffer;
+    private static final int FPS = 30;
+    private int janelaW = 1366;
+    private int janelaH = 768;
+    private int pixelsPorMetro;
 
     // ====================================================
     private int contadorTempo = 1;
     private LeituraArquivo leituraArquivo;
-//    private String caminhoArquivo = System.getProperty("user.dir") + "/src/arquivos/Paths_D - Spain_ES-01.txt";
-    private String caminhoArquivo = System.getProperty("user.dir") + "/src/arquivos/Paths_D - France - FR-01.txt";
+    private String diretorioArquivos = System.getProperty("user.dir") + "/src/arquivos/";
+    private String arqFR01 = "Paths_D - France - FR-01.txt";
+    private String arqSP01 = "Paths_D - Spain_ES-01.txt";
     private ArrayList<Bolinha> listaBolinhas = new ArrayList<>();
     private HashMap<String, Color> mapaCores;
     // ====================================================
@@ -36,24 +37,16 @@ public class JanelaPrincipal extends JFrame {
         mapaCores.put("intimo", new Color(255, 3,0));
         mapaCores.put("pessoal", new Color(255, 250, 0));
         mapaCores.put("social", new Color(15, 16, 255));
-        mapaCores.put("publico", new Color(23, 255, 2));
     }
 
-    public void setup(){
+    private void setup(){
         setaCoresEspacos();
         leituraArquivo = new LeituraArquivo();
-        listaBolinhas = leituraArquivo.ler(new File(caminhoArquivo));
+        listaBolinhas = leituraArquivo.ler(new File(diretorioArquivos + arqFR01));
+        pixelsPorMetro = leituraArquivo.getPixelsPorMetro();
     }
 
-    /**
-     --------------------------------------------------------------------
-     ESSE MÉTODO VAI MOVER O OBJETO ATÉ A COORDENADA X = 500
-     PARA QUE ELE TOQUE O OBJETO 2
-     E A CADA VEZ QUE ELE CHEGAR NO FINAL DA TELA, VOLTA PRA O COMEÇO
-     EM COM UMA NOVA COORDENADA Y ALEATÓRIA!!!
-     --------------------------------------------------------------------
-     */
-    public void movimentarBolinhas() {
+    private void movimentarBolinhas() {
         // Para cada pessoa na lista, realiza o movimento
         for (Bolinha bolinha: listaBolinhas) {
             bolinha.movimenta(contadorTempo);
@@ -61,72 +54,56 @@ public class JanelaPrincipal extends JFrame {
         contadorTempo++;
     }
 
-    /**
-     --------------------------------------------------------------------
-     SE O OBJETO COLEDIR EM UM DOS PONTOS, EXIBIRÁ UM TEXTO DIZENDO QUAL FOI TOCADO
-     ESSE MÉTODO VAI SER CHAMANDO LÁ NO DENTRO DO MÉTODO desenharGraficos()
-     --------------------------------------------------------------------
-     */
-    public void exibeTexto() {
-        Graphics bbg = backBuffer.getGraphics();
-        bbg.setColor(Color.RED);
-        if (colidiuEsquerda) {
-            bbg.drawString("COLISÃO: ESQUERDA!!!", 200, 110);
-        }
-        if (colidiuDireita) {
-            bbg.drawString("COLISÃO: DIREITA!!!", 200, 120);
-        }
-        if (colidiuCima) {
-            bbg.drawString("COLISÃO: CIMA!!!", 200, 130);
-        }
-        if (colidiuBaixo) {
-            bbg.drawString("COLISÃO: BAIXO!!!", 200, 140);
-        }
-    }
-
-    /**
-     --------------------------------------------------------------------
-     ESSE É O NOSSO MÉTODO QUE VAI TRATAR A COLISÃO DE APENAS UM PONTO
-     ESSE MÉTODO RECEBE COMO ARGUMENTO: X, Y DO PONTO E
-     X,Y,W,H DO OBJETO ONDE VAI COLIDIR!
-     --------------------------------------------------------------------
-     */
-    public boolean colisao(int pontoX, int pontoY, int x, int y, int w, int h) {
-        if ((pontoX >= x && pontoX <= x + w) && (pontoY >= y && pontoY <= y + h)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    // --------------------------------------------------------------------
-    public void atualizar() {
-        //AQUI VAMOS VERIFICAR SE CADA PONTO ESTÁ SENDO TOCADO NO OBJETO 2
-//        colidiuEsquerda = colisao(obj1X, obj1Y+obj1H/2, obj2X, obj2Y, obj2W, obj2H);
-//        colidiuDireita = colisao(obj1X+obj1W, obj1Y+obj1H/2, obj2X, obj2Y, obj2W, obj2H);
-//        colidiuCima = colisao(obj1X+obj1W/2, obj1Y, obj2X, obj2Y, obj2W, obj2H);
-//        colidiuBaixo = colisao(obj1X+obj1W/2, obj1Y+obj1H, obj2X, obj2Y, obj2W, obj2H);
+    private void atualizar() {
         movimentarBolinhas();
+        for (int i = 0; i < listaBolinhas.size(); i++) {
+            for (int j = 0; j < listaBolinhas.size(); j++){
+                if(i!=j){
+                    calculaEspacoPessoal(listaBolinhas.get(i), listaBolinhas.get(j));
+                }
+            }
+        }
     }
 
-    public void desenharGraficos() {
-        Graphics g = getGraphics(); // ISSO JÁ ESTAVA AQUI
-        Graphics bbg = backBuffer.getGraphics();// ISSO TAMBÉM JÁ ESTAVA AQUI...
-        // ==================================================================================
+    private void calculaEspacoPessoal(Bolinha b1, Bolinha b2){
+        int distancia = (int) distanciaEntreDoisPontos(b1, b2);
+        if (distancia <= pixelsPorMetro/2){
+            b1.setCor(mapaCores.get("intimo"));
+            b2.setCor(mapaCores.get("intimo"));
+        }
+        else if(distancia > pixelsPorMetro/2 && distancia <= (pixelsPorMetro + pixelsPorMetro/2)){
+            b1.setCor(mapaCores.get("pessoal"));
+            b2.setCor(mapaCores.get("pessoal"));
+        }
+        else if(distancia > (pixelsPorMetro + pixelsPorMetro/2) && distancia < pixelsPorMetro*2){
+            b1.setCor(mapaCores.get("social"));
+            b2.setCor(mapaCores.get("social"));
+        }
+
+    }
+
+    private void desenharGraficos() {
+        Graphics g = getGraphics();
+        Graphics bbg = backBuffer.getGraphics();
+
         bbg.setColor(Color.BLACK);
-        bbg.fillRect(0, 0, janelaW, janelaH);// DESENHA UM FUNDO BRANCO NA TELA!
+        bbg.fillRect(0, 0, janelaW, janelaH);
 
-        // EXIBE UM TEXTO CASO O OBJETO COLIDA!
-//        exibeTexto();
-
-        for (Bolinha bolinha: listaBolinhas)
+        for (Bolinha bolinha: listaBolinhas) {
             bolinha.desenha(bbg);
-    
-        // ==================================================================================
-        g.drawImage(backBuffer, 0, 0, this);// OBS: ISSO DEVE FICAR SEMPRE NO
-        // FINAL!
+            bolinha.setCor(Color.WHITE);
+        }
+
+        g.drawImage(backBuffer, 0, 0, this);
     }
 
-    public void inicializar() {
+    private double distanciaEntreDoisPontos(Bolinha b1, Bolinha b2){
+        return Math.sqrt(
+                Math.pow((b1.getX() - b2.getX()),2) +
+                Math.pow((b1.getY() - b2.getY()),2));
+    }
+
+    private void inicializar() {
         setTitle("Janela Principal!");
         setSize(janelaW, janelaH);
         setResizable(true);
@@ -136,7 +113,7 @@ public class JanelaPrincipal extends JFrame {
         backBuffer = new BufferedImage(janelaW, janelaH, BufferedImage.TYPE_INT_RGB);
     }
 
-    public void run() {
+    private void run() {
         int cont = 0;
         setup();
         inicializar();
@@ -158,3 +135,4 @@ public class JanelaPrincipal extends JFrame {
         game.run();
     }
 }
+
