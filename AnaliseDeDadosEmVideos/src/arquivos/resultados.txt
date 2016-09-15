@@ -1,0 +1,5 @@
+/---------------------------------------/
+Nome do arquivo: Paths_D - France - FR-01.txt
+Eventos de espaço íntimo: 3196
+Eventos de espaço pessoal: 1682
+Eventos de espaço social: 1557

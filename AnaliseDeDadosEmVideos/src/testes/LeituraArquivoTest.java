@@ -15,7 +15,7 @@ public class LeituraArquivoTest {
 
     private LeituraArquivo leituraArquivo;
     private String diretorioArquivos = System.getProperty("user.dir") + "/src/arquivos/";
-    private static final String arqSP   = "Paths_D - Spain_ES-01.txt";
+    private static final String arqSP   = "Paths_D - Spain - ES-01.txt";
     private static final String arqFR01 = "Paths_D - France - FR-01.txt";
     private static final String arqFR02 = "Paths_D - France - FR-02.txt";
 

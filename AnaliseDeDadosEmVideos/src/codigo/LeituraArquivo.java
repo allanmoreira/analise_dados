@@ -1,10 +1,8 @@
 package codigo;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allan Moreira on 8/17/16.
@@ -68,5 +66,33 @@ public class LeituraArquivo {
             e.printStackTrace();
         }
         return listaPessoas;
+    }
+
+    public boolean novo(String arq, int qtdeEventosEspacoIntimo, int qtdeEventosEspacoPessoal, int qtdeEventosEspacoSocial) {
+        String diretorioArquivos = System.getProperty("user.dir") + "/src/arquivos/";
+        String nomeArq = "resultados.txt";
+
+        try {
+            // Abre o arquivo
+            FileWriter f = new FileWriter(diretorioArquivos + nomeArq);
+            try {
+                // Grava as informacoes no arquivo
+                f.write("/---------------------------------------/\n");
+                f.write("Nome do arquivo: " + arq + "\n");
+                f.write("Eventos de espaço íntimo: " + qtdeEventosEspacoIntimo);
+                f.write("\n");
+                f.write("Eventos de espaço pessoal: " + qtdeEventosEspacoPessoal);
+                f.write("\n");
+                f.write("Eventos de espaço social: " + qtdeEventosEspacoSocial);
+
+
+            } finally {
+                // Fecha o arquivo
+                f.close();
+            }
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 }

@@ -18,23 +18,29 @@ public class JanelaPrincipal extends JFrame {
 
     private BufferedImage backBuffer;
     private static final int FPS = 30;
-    private int janelaW = 1366;
-    private int janelaH = 800;
-    private int painelBolW = 800;
-    private int painelBolH = 800;
+    private int janelaW = 1200;
+    private int janelaH = 700;
     private int pixelsPorMetro;
 
-    private JPanel painelBolinhas;
-
-    // ====================================================
+    private int tempoTotal = 200;
     private int contadorTempo = 1;
     private LeituraArquivo leituraArquivo;
     private String diretorioArquivos = System.getProperty("user.dir") + "/src/arquivos/";
-    private String arqFR01 = "Paths_D - France - FR-01.txt";
-    private String arqSP01 = "Paths_D - Spain_ES-01.txt";
+    private String arq = "Paths_D - France - FR-01.txt";
+//    private String arq = "Paths_D - Turkey - TR01.txt";
+//    private String arq = "Paths_D - Brazil - BR01.txt";
+//    private String arq = "Paths_D - China - CN-01.txt";
     private ArrayList<Bolinha> listaBolinhas = new ArrayList<>();
     private HashMap<String, Color> mapaCores;
-    // ====================================================
+
+    private int cinqCentim;
+    private int umMetroEmeio;
+    private int doisMetros;
+
+    private String arquivo = arq;
+    private int qtdeEventosEspacoIntimo;
+    private int qtdeEventosEspacoPessoal;
+    private int qtdeEventosEspacoSocial;
 
     private void setaCoresEspacos(){
         mapaCores = new HashMap<>();
@@ -47,13 +53,20 @@ public class JanelaPrincipal extends JFrame {
     private void setup(){
         setaCoresEspacos();
         leituraArquivo = new LeituraArquivo();
-        listaBolinhas = leituraArquivo.ler(new File(diretorioArquivos + arqFR01));
+        listaBolinhas = leituraArquivo.ler(new File(diretorioArquivos + arquivo));
         pixelsPorMetro = leituraArquivo.getPixelsPorMetro();
+
+        cinqCentim = pixelsPorMetro/2;
+        umMetroEmeio = pixelsPorMetro + pixelsPorMetro/2;
+        doisMetros = pixelsPorMetro*2;
     }
 
     private void movimentarBolinhas() {
-        for (Bolinha bolinha: listaBolinhas) {
-            bolinha.movimenta(contadorTempo);
+        for (Bolinha b: listaBolinhas) {
+            b.movimenta(contadorTempo);
+            Coordenada c = b.getFilaCoordenadas().trailer();
+            if (c.getTempo() > tempoTotal)
+                tempoTotal = c.getTempo();
         }
         contadorTempo++;
     }
@@ -71,10 +84,6 @@ public class JanelaPrincipal extends JFrame {
 
     private void calculaEspacoPessoal(Bolinha b1, Bolinha b2){
         int distancia = (int) distanciaEntreDoisPontos(b1, b2);
-
-        int cinqCentim = pixelsPorMetro/2;
-        int umMetroEmeio = pixelsPorMetro + pixelsPorMetro/2;
-        int doisMetros = pixelsPorMetro*2;
 
         if (distancia <= cinqCentim){
             b1.setCor(mapaCores.get("intimo"), "intimo");
@@ -95,10 +104,28 @@ public class JanelaPrincipal extends JFrame {
         Graphics bbg = backBuffer.getGraphics();
 
         bbg.setColor(Color.BLACK);
-        bbg.fillRect(0, 0, janelaW, janelaH);
+        bbg.fillRect(0, 0, getWidth(), getHeight());
+
+//        g.setColor(new Color(0,255, 243));
+//        g.fillOval(1366,800, 50, 50);
 
         for (Bolinha bolinha: listaBolinhas) {
+            System.out.println("--------------------------");
             bolinha.desenha(bbg);
+
+            if (bolinha.getCor().equals(mapaCores.get("intimo"))){
+                qtdeEventosEspacoIntimo++;
+                System.out.println("intimo");
+            }
+            else if(bolinha.getCor().equals(mapaCores.get("pessoal"))){
+                qtdeEventosEspacoPessoal++;
+                System.out.println("pessoal");
+            }
+            else if(bolinha.getCor().equals(mapaCores.get("social"))){
+                qtdeEventosEspacoSocial++;
+                System.out.println("social");
+            }
+            System.out.println("--------------------------");
             bolinha.setCor(mapaCores.get("publico"), "publico");
         }
 
@@ -117,84 +144,15 @@ public class JanelaPrincipal extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
+        setLocationRelativeTo(null);
         setVisible(true);
         backBuffer = new BufferedImage(janelaW, janelaH, BufferedImage.TYPE_INT_RGB);
-//        montaTela();
     }
 
-    /*
-    private void montaTela(){
-        JTextField jTextFieldCampoTexto;
-        JLabel labelTitulo;
-        JPanel painelDados;
-
-        painelBolinhas = new javax.swing.JPanel();
-//        painelBolinhas.setSize(painelBolW, painelBolH);
-        painelDados = new javax.swing.JPanel();
-        labelTitulo = new javax.swing.JLabel();
-        jTextFieldCampoTexto = new javax.swing.JTextField();
-
-        GroupLayout painelBolinhasLayout = new GroupLayout(painelBolinhas);
-        painelBolinhas.setLayout(painelBolinhasLayout);
-        painelBolinhasLayout.setHorizontalGroup(painelBolinhasLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 193, Short.MAX_VALUE));
-        painelBolinhasLayout.setVerticalGroup(painelBolinhasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-
-        painelDados.setBackground(new java.awt.Color(169, 169, 169));
-
-        labelTitulo.setText("Título");
-
-        jTextFieldCampoTexto.setEditable(false);
-        jTextFieldCampoTexto.setText("jTextField1");
-
-        GroupLayout painelDadosLayout = new GroupLayout(painelDados);
-        painelDados.setLayout(painelDadosLayout);
-        painelDadosLayout.setHorizontalGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(painelDadosLayout.createSequentialGroup()
-                                .addGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(painelDadosLayout.createSequentialGroup()
-                                                .addGap(21, 21, 21)
-                                                .addComponent(labelTitulo))
-                                        .addGroup(painelDadosLayout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(jTextFieldCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(119, Short.MAX_VALUE))
-        );
-        painelDadosLayout.setVerticalGroup(
-                painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(painelDadosLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(labelTitulo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(115, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(painelBolinhas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(painelDados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(painelBolinhas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(painelDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 123, Short.MAX_VALUE))
-        );
-
-        pack();
-    }
-    */
     private void run() {
-        int cont = 0;
         setup();
         inicializar();
-        while (true) {
-//        while (cont < 2) {
+        while (contadorTempo <= tempoTotal) {
             atualizar();
             desenharGraficos();
             try {
@@ -202,13 +160,15 @@ public class JanelaPrincipal extends JFrame {
             } catch (Exception e) {
                 System.out.println("Thread interrompida!");
             }
-            cont++;
         }
+        leituraArquivo.novo(arquivo, qtdeEventosEspacoIntimo, qtdeEventosEspacoPessoal, qtdeEventosEspacoSocial);
+        dispose();
+        CommandExecutor.execute();
     }
 
     public static void main(String[] args) {
-        JanelaPrincipal game = new JanelaPrincipal();
-        game.run();
+        JanelaPrincipal janelaPrincipal = new JanelaPrincipal();
+        janelaPrincipal.run();
     }
 }
 

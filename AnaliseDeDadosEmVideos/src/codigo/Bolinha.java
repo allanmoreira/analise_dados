@@ -40,6 +40,10 @@ public class Bolinha {
         this.esp = esp;
     }
 
+    public Color getCor(){
+        return cor;
+    }
+
     public boolean isEstaNoTempo(){
         return estaNoTempo;
     }

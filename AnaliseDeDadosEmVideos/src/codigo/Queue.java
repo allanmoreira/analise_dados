@@ -46,6 +46,14 @@ public class Queue<E> {
             return header.next.element;
     }
 
+    public E trailer () throws UnsupportedOperationException {
+        if (trailer.prev == null)
+            throw new UnsupportedOperationException("A fila está vazia!");
+        else
+            return trailer.prev.element;
+
+    }
+
 
     public void enqueue(E element) {
         Node <E> n= new Node<>(element);
