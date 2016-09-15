@@ -110,22 +110,17 @@ public class JanelaPrincipal extends JFrame {
 //        g.fillOval(1366,800, 50, 50);
 
         for (Bolinha bolinha: listaBolinhas) {
-            System.out.println("--------------------------");
             bolinha.desenha(bbg);
 
             if (bolinha.getCor().equals(mapaCores.get("intimo"))){
                 qtdeEventosEspacoIntimo++;
-                System.out.println("intimo");
             }
             else if(bolinha.getCor().equals(mapaCores.get("pessoal"))){
                 qtdeEventosEspacoPessoal++;
-                System.out.println("pessoal");
             }
             else if(bolinha.getCor().equals(mapaCores.get("social"))){
                 qtdeEventosEspacoSocial++;
-                System.out.println("social");
             }
-            System.out.println("--------------------------");
             bolinha.setCor(mapaCores.get("publico"), "publico");
         }
 
